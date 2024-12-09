@@ -1,70 +1,78 @@
 package com.g1.back_end.controller;
 
-import com.g1.back_end.domain.CenterCost;
-import com.g1.back_end.dto.*;
+import com.g1.back_end.dto.CostCenterDTO;
 import com.g1.back_end.service.CenterCostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/center-cost")
+@RequestMapping("/api/cost-centers")
 public class CenterCostController {
 
     @Autowired
-    private CenterCostService costService;
+    private CenterCostService centerCostService;
 
-    // POST /api/v1/cost-centers
-    @PostMapping("/cost-centers")
-    public ResponseEntity<Map<String,String>> createCostCenter(@Valid @RequestBody CostCenterDTO costCenterDTO) {
-        CenterCost centerCost = costService.criarCenterCost(costCenterDTO);
-        Map<String,String> response = new HashMap<>();
-        response.put("message","Centro de custos cadastrado com sucesso");
-        return ResponseEntity.status(201).body(response);
+    /**
+     * Creates a new cost center.
+     *
+     * @param costCenterDTO the data for the new cost center.
+     * @return the created cost center.
+     */
+    @PostMapping
+    public ResponseEntity<CostCenterDTO> createCostCenter(@Valid @RequestBody CostCenterDTO costCenterDTO) {
+        CostCenterDTO createdCostCenter = centerCostService.createCenterCost(costCenterDTO);
+        return ResponseEntity.status(201).body(createdCostCenter);
     }
 
-    // POST /api/v1/create-variable-cost/{id-cost-center}
-    @PostMapping("/create-variable-cost/{id-cost-center}")
-    public ResponseEntity<Void> addVariableExpense(@PathVariable("id-cost-center") Long costCenterId, @RequestBody VariableExpenseDTO variableExpenseDTO) {
-        costService.addVariableExpense(costCenterId, variableExpenseDTO);
-        return ResponseEntity.status(201).build(); // Created status
+    /**
+     * Retrieves all cost centers.
+     *
+     * @return a list of all cost centers.
+     */
+    @GetMapping
+    public ResponseEntity<List<CostCenterDTO>> getAllCostCenters() {
+        List<CostCenterDTO> costCenters = centerCostService.getAllCenterCosts();
+        return ResponseEntity.ok(costCenters);
     }
 
-    // GET /api/v1/variable-cost/by-cost-center/{id-cost-center}
-     @GetMapping("/variable-cost/by-cost-center/{id-cost-center}")
-    public ResponseEntity<List<VariableExpenseDTO>> getVariableExpensesByCostCenter(@PathVariable("id-cost-center") Long costCenterId) {
-        List<VariableExpenseDTO> expenses = costService.getVariableExpensesByCostCenter(costCenterId);
-        return ResponseEntity.ok(expenses);
+    /**
+     * Retrieves a specific cost center by ID.
+     *
+     * @param id the ID of the cost center to retrieve.
+     * @return the requested cost center.
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<CostCenterDTO> getCostCenterById(@PathVariable Long id) {
+        CostCenterDTO costCenter = centerCostService.getCenterCostById(id);
+        return ResponseEntity.ok(costCenter);
     }
 
-    // GET /api/v1/variable-cost/by-cost-center/{name-employee}
-    @GetMapping("/variable-cost/by-cost-center/{name-employee}")
-    public ResponseEntity<List<VariableExpenseDTO>> getVariableExpensesByEmployee(@PathVariable("name-employee") String employeeName) {
-        List<VariableExpenseDTO> expenses = costService.getVariableExpensesByEmployee(employeeName);
-        return ResponseEntity.ok(expenses);
+    /**
+     * Updates a specific cost center by ID.
+     *
+     * @param id             the ID of the cost center to update.
+     * @param costCenterDTO  the updated data for the cost center.
+     * @return the updated cost center.
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<CostCenterDTO> updateCostCenter(@PathVariable Long id, @Valid @RequestBody CostCenterDTO costCenterDTO) {
+        CostCenterDTO updatedCostCenter = centerCostService.updateCenterCost(id, costCenterDTO);
+        return ResponseEntity.ok(updatedCostCenter);
+    }
+
+    /**
+     * Deletes a specific cost center by ID.
+     *
+     * @param id the ID of the cost center to delete.
+     * @return a response indicating the deletion was successful.
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCostCenter(@PathVariable Long id) {
+        centerCostService.deleteCenterCost(id);
+        return ResponseEntity.noContent().build();
     }
 }
-
-// PATCH /api/v1/create-variable-cost
-//@PatchMapping("/create-variable-cost")
-//public ResponseEntity<Void> approvalVariableExpense(@RequestBody VariableExpenseApprovalDTO approvalDTO) {
-//   costService.approveVariableExpense(approvalDTO);
-//   return ResponseEntity.ok().build();
-//}
-// GET /api/v1/cost-center/{id-executive}
-// @GetMapping("/cost-center/{id-executive}")
-//public ResponseEntity<CostCenterDTO> getCostCenterById(@PathVariable("id-executive") Long executiveId) {
-//   CostCenterDTO costCenter = costService.getCostCenterById(executiveId);
-//    return ResponseEntity.ok(costCenter);
-//}
-
-// GET /api/v1/employees/by-cost-center/{id-cost-center}
-// @GetMapping("/employees/by-cost-center/{id-cost-center}")
-//public ResponseEntity<List<EmployeeDTO>> getEmployeesByCostCenter(@PathVariable("id-cost-center") Long costCenterId) {
-//  List<EmployeeDTO> employees = costService.getEmployeesByCostCenter(costCenterId);
-//   return ResponseEntity.ok(employees);
-//}

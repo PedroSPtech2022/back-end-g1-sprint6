@@ -10,5 +10,7 @@ public interface VariableExpenseRepository extends JpaRepository<VariableExpense
     List<VariableExpense> findByCostCenterId(Long costCenterId);
     List<VariableExpense> findByEmployeeName(String employeeName);
     Optional<VariableExpense> findByDateAndResponsibile(LocalDate date, String responsible);
+    List<VariableExpense> findByResponsibileName(String responsibleName);
+
 
 }

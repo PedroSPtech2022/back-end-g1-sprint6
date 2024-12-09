@@ -1,5 +1,6 @@
 package com.g1.back_end.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 public class VariableExpenseApprovalDTO {
     private LocalDate date;
     private String responsible;
+    @NotNull(message = "tripo não pode estar vazio")
     private String variableType;
     private Boolean approved;
 }

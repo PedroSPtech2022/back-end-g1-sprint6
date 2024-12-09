@@ -12,12 +12,19 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CostCenterDTO {
-    private String responsible;
-    private String area;
+
+    @NotBlank(message = "O responsável não pode ser nulo")
+    private String responsible;  // Aqui você pode usar EmployeeDTO, se necessário
+
+    @NotBlank
+    private AreaDTO area;  // Mudando para AreaDTO para refletir a área do centro de custo
+
     @NotBlank(message = "O nome do centro de custo não pode ser nulo")
     private String name;
-    @NotNull
+
+    @NotNull(message = "O orçamento anual não pode ser nulo")
     private Integer annualBudget;
+
     @NotBlank(message = "O tipo do centro de custo não pode ser nulo")
     private String typeCostCenter;
 }

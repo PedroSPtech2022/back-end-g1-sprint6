@@ -17,14 +17,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CenterCost {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank(message = "O nome do centro de custo não pode ser nulo")
     private String name;
+
     @NotNull
     private Integer annualBudget;
-    @NotBlank(message = "O tipoe não pode ser nulo")
+
+    @NotBlank(message = "O tipo não pode ser nulo")
     private String typeCostCenter;
 
     @ManyToOne
@@ -32,11 +36,9 @@ public class CenterCost {
     private AreaDomain area;
 
     @ManyToOne
-    @JoinColumn(name= "area_id", referencedColumnName="area_id"  )
+    @JoinColumn(name = "responsible_id", nullable = false)
     private Employee responsible;
 
-    @OneToMany(mappedBy = "employee")
-    @JoinColumn(name= "area_id", referencedColumnName="area_id")
+    @OneToMany(mappedBy = "centerCost")
     private List<Employee> employees;
-
 }

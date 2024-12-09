@@ -35,7 +35,7 @@ public class VariableExpense {
     private BigDecimal value;
     @DateTimeFormat
     private LocalDate date;
-    private String describe;
+    private String describer;
     private String observation;
 
     @ManyToOne
